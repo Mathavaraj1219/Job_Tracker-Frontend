@@ -63,7 +63,7 @@ export const router = createBrowserRouter([
   {
     path: '/profile',
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute role="USER">
         <Profile />
       </ProtectedRoute>
     )

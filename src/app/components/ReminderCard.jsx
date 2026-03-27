@@ -1,4 +1,4 @@
-import { Clock, Mail, MessageCircle, Trash2, Building2 } from 'lucide-react';
+import { Calendar, Mail, MessageCircle, Trash2, Building2, BadgeCheck } from 'lucide-react';
 
 export default function ReminderCard({ reminder, onDelete }) {
   const getReminderTypeColor = (type) => {
@@ -20,7 +20,7 @@ export default function ReminderCard({ reminder, onDelete }) {
     <div className={`bg-white rounded-xl border p-6 hover:shadow-md transition-shadow ${
       isPast ? 'border-gray-300 opacity-60' : 'border-gray-200'
     }`}>
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-2">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <span className={`inline-block px-3 py-1 rounded-full text-xs border ${getReminderTypeColor(reminder.type)}`}>
@@ -30,11 +30,14 @@ export default function ReminderCard({ reminder, onDelete }) {
               <span className="text-xs text-gray-500">(Past)</span>
             )}
           </div>
-          <div className="flex items-center gap-2 text-gray-600 mb-1">
+          <div className="flex items-center gap-2 text-gray-600 mb-2">
             <Building2 className="w-4 h-4" />
             <span className="text-sm font-medium">{reminder.company}</span>
           </div>
+          <div className="flex items-center gap-2 text-gray-600 mb-2">
+            <BadgeCheck className="w-4 h-4" />
           <p className="text-sm text-gray-500">{reminder.position}</p>
+          </div>
         </div>
         <button
           onClick={() => onDelete(reminder.id)}
@@ -44,24 +47,24 @@ export default function ReminderCard({ reminder, onDelete }) {
         </button>
       </div>
 
-      <div className="space-y-2 mb-4">
+      <div className="space-y-2 mb-2">
         <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Clock className="w-4 h-4" />
+          <Calendar className="w-4 h-4" />
           <span>
             {new Date(reminder.date).toLocaleDateString()} at {reminder.time}
           </span>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {reminder.notifyEmail && (
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <Mail className="w-3 h-3" />
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <Mail className="w-4 h-4" />
               <span>Email</span>
             </div>
           )}
           {reminder.notifyWhatsApp && (
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <MessageCircle className="w-3 h-3" />
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <MessageCircle className="w-4 h-4" />
               <span>WhatsApp</span>
             </div>
           )}

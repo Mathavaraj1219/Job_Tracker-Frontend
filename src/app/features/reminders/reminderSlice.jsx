@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   fetchRemindersAPI,
   addReminderAPI,
-  deleteReminderAPI
+  deleteReminderAPI,
+  updateReminderAPI
 } from "./reminderAPI";
 
 // Fetch
@@ -29,13 +30,21 @@ export const deleteReminder = createAsyncThunk(
   }
 );
 
+//Update
+export const updateReminder = createAsyncThunk(
+  "reminders/update",
+  async (id, data) => {
+    return await updateReminderAPI(id, data);
+  }
+)
+
 const reminderSlice = createSlice({
   name: "reminders",
   initialState: {
     reminders: [],
-    loading: false,         // for fetch
-    addLoading: false,      // ✅ for add
-    deleteLoading: false,   // (optional)
+    loading: false, 
+    addLoading: false,   
+    deleteLoading: false,
   },
 
   extraReducers: (builder) => {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, register } from '../features/auth/authSlice';
+import { login, register, clearError } from '../features/auth/authSlice';
 import { toast } from 'sonner';
 import logo from "../../assets/logo2.png";
 
@@ -20,7 +20,7 @@ export default function Login() {
 
   // ✅ Redirect after login
   useEffect(() => {
-  if (token && user) {
+  if (token) {
     toast.success('Login successful!');
 
     if (user.role === 'ADMIN') {
@@ -31,12 +31,22 @@ export default function Login() {
   }
 }, [token, user, navigate]);
 
-  // ❗ Handle errors
+// ✅ Error handling
+useEffect(() => {
+  if (error) {
+    toast.error(error);
+    dispatch(clearError());
+  }
+}, [error]);
+
+  // ✅ Reset only when switching mode
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
+      setFormData({
+        name: '',
+        email: '',
+        password: ''
+      })
+  }, [isLogin]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,10 +66,7 @@ export default function Login() {
         email: formData.email,
         password: formData.password
       }))
-      .unwrap()
-      .catch((err) => {
-        toast.error(err || "Login failed");
-      });
+      .unwrap();
     } else {
       dispatch(register({
         name: formData.name,

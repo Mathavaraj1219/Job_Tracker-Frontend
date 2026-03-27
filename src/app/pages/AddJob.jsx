@@ -18,6 +18,7 @@ const { addLoading, error } = useSelector((state) => state.jobs);
     status: 'Applied',
     salary: '',
     location: '',
+    date: '',
     notes: ''
   });
 
@@ -151,7 +152,6 @@ const { addLoading, error } = useSelector((state) => state.jobs);
                   placeholder="$100k - $130k"
                 />
               </div>
-            </div>
 
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
@@ -166,6 +166,22 @@ const { addLoading, error } = useSelector((state) => state.jobs);
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="San Francisco, CA (Remote)"
               />
+            </div>
+
+            <div>
+              <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+                Apply Date *
+              </label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
             </div>
 
             <div>

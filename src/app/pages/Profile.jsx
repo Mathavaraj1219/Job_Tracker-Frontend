@@ -97,7 +97,7 @@ export default function Profile() {
                     type="text"
                     id="name"
                     name="name"
-                    value={profileData.name}
+                    value={profileData.name || ''}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="John Doe"
@@ -112,7 +112,7 @@ export default function Profile() {
                     type="email"
                     id="email"
                     name="email"
-                    value={profileData.email}
+                    value={profileData.email || ''}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="you@example.com"
@@ -136,7 +136,7 @@ export default function Profile() {
                     type="tel"
                     id="phone"
                     name="phone"
-                    value={profileData.phone}
+                    value={profileData.phone || ''}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="+1 (555) 123-4567"
@@ -151,7 +151,7 @@ export default function Profile() {
                     type="tel"
                     id="whatsapp"
                     name="whatsapp"
-                    value={profileData.whatsapp}
+                    value={profileData.whatsapp || ''}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="+1 (555) 123-4567"
@@ -174,7 +174,7 @@ export default function Profile() {
                   <input
                     type="checkbox"
                     name="emailNotifications"
-                    checked={profileData.emailNotifications}
+                    checked={profileData.emailNotifications || true}
                     onChange={handleChange}
                     className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
@@ -193,7 +193,7 @@ export default function Profile() {
                   <input
                     type="checkbox"
                     name="whatsappNotifications"
-                    checked={profileData.whatsappNotifications}
+                    checked={profileData.whatsappNotifications || false}
                     onChange={handleChange}
                     className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />

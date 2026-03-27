@@ -55,7 +55,7 @@ export default function JobCard({ job, onDelete }) {
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Calendar className="w-4 h-4" />
-          <span>Applied: {new Date(job.appliedDate).toLocaleDateString()}</span>
+          <span>Applied: {(job.date) ? new Date(job.date).toLocaleDateString() : "Nill"}</span>
         </div>
       </div>
 

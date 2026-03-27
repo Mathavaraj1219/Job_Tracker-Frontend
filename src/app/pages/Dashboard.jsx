@@ -6,7 +6,7 @@ import JobCard from '../components/JobCard';
 import { fetchJobs, deleteJob } from '../features/jobs/jobSlice';
 import ReminderCard from '../components/ReminderCard';
 import { fetchReminders, deleteReminder } from '../features/reminders/reminderSlice';
-import { Plus, Briefcase, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Briefcase, Clock, CheckCircle, XCircle, Bell } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Dashboard() {
@@ -199,9 +199,11 @@ export default function Dashboard() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {reminders.length === 0 ? (
               <div className="text-center col-span-full py-12 bg-white rounded-xl">
+                <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">No reminders found</h3>
                 <p className="text-gray-600">Start by adding a reminder</p>
               </div>
+              
             ) : (
               reminders.map((reminder) => (
                 <ReminderCard
