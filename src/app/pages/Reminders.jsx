@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import ReminderCard from '../components/ReminderCard';
+import EditReminder from './EditReminder';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReminders, addReminder, deleteReminder } from '../features/reminders/reminderSlice';
+import { fetchReminders, addReminder, deleteReminder, updateReminder } from '../features/reminders/reminderSlice';
 import { fetchJobs } from '../features/jobs/jobSlice';
 import { Plus, Bell } from 'lucide-react';
 import { toast } from 'sonner';
@@ -13,6 +14,9 @@ export default function Reminders() {
   // ✅ Redux state
   const { reminders, loading } = useSelector((state) => state.reminders);
   const { jobs } = useSelector((state) => state.jobs);
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedReminder, setSelectedReminder] = useState(null);
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -80,6 +84,31 @@ export default function Reminders() {
       toast.success('Reminder deleted');
     } catch (error) {
       toast.error('Failed to delete reminder');
+    }
+  };
+
+  const handleEdit = (reminder) => {
+    setSelectedReminder(reminder);
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (id, data) => {
+    try {
+      const selectedJob = jobs.find(j => j.id === parseInt(data.jobId));
+
+      const updatedData = {
+        ...data,
+        jobId: parseInt(data.jobId),
+        company: selectedJob.company,
+        position: selectedJob.position
+      };
+
+      await dispatch(updateReminder({ id, data: updatedData })).unwrap();
+
+      setShowEditModal(false);
+      toast.success("Reminder updated ✅");
+    } catch {
+      toast.error("Update failed ❌");
     }
   };
 
@@ -284,7 +313,7 @@ export default function Reminders() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {upcomingReminders.map((reminder) => (
-                    <ReminderCard key={reminder.id} reminder={reminder} onDelete={handleDelete} />
+                    <ReminderCard key={reminder.id} reminder={reminder} onDelete={handleDelete} onEdit={handleEdit}/>
                   ))}
                 </div>
               )}
@@ -296,7 +325,7 @@ export default function Reminders() {
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Past Reminders</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {pastReminders.map((reminder) => (
-                    <ReminderCard key={reminder.id} reminder={reminder} onDelete={handleDelete} />
+                    <ReminderCard key={reminder.id} reminder={reminder} onDelete={handleDelete} onEdit={handleEdit} />
                   ))}
                 </div>
               </div>
@@ -304,12 +333,14 @@ export default function Reminders() {
           </>
         )}
 
+        <EditReminder isOpen={showEditModal} onClose={() => setShowEditModal(false)} selectedReminder={selectedReminder} onUpdate={handleUpdate} jobs={jobs} />
+
         {/* Info Box */}
         <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
           <h3 className="text-sm font-medium text-blue-900 mb-2">About Notifications</h3>
           <p className="text-sm text-blue-700">
             Email and WhatsApp notifications will be sent through your Spring Boot backend. 
-            Configure your email service (SMTP) and WhatsApp API (Twilio) in the backend to enable notifications.
+            Configure your email service (SendGrid) and WhatsApp API (Twilio) in the backend to enable notifications.
           </p>
         </div>
       </div>

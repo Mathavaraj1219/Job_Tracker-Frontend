@@ -1,6 +1,8 @@
-import { Calendar, Mail, MessageCircle, Trash2, Building2, BadgeCheck } from 'lucide-react';
+import { Calendar, Mail, MessageCircle, Trash2, Building2, BadgeCheck, Pencil } from 'lucide-react';
+import { useState } from 'react';
+import EditReminder from '../pages/EditReminder';
 
-export default function ReminderCard({ reminder, onDelete }) {
+export default function ReminderCard({ reminder, onDelete, onEdit }) {
   const getReminderTypeColor = (type) => {
     switch (type) {
       case 'Interview':
@@ -42,12 +44,20 @@ export default function ReminderCard({ reminder, onDelete }) {
           <p className="text-sm text-gray-500">{reminder.position}</p>
           </div>
         </div>
+        <div className="flex gap-2">
+        <button
+          onClick={() => onEdit(reminder)}
+          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+        >
+          <Pencil className="w-4 h-4" />
+        </button>
         <button
           onClick={() => onDelete(reminder.id)}
           className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>
+        </div>
       </div>
 
       <div className="space-y-2 mb-2">
@@ -77,6 +87,7 @@ export default function ReminderCard({ reminder, onDelete }) {
       {reminder.notes && (
         <p className="text-sm text-gray-600 p-3 bg-gray-50 rounded-lg">{reminder.notes}</p>
       )}
-    </div>
+      
+    </div> 
   );
 }
