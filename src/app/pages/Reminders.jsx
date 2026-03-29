@@ -91,8 +91,12 @@ export default function Reminders() {
     });
   };
 
-  const upcomingReminders = reminders.filter(r => new Date(r.date) >= new Date());
-  const pastReminders = reminders.filter(r => new Date(r.date) < new Date());
+  const now = new Date();
+
+  const getDateTime = (r) => new Date(`${r.date}T${r.time}`);
+
+  const upcomingReminders = reminders.filter(r => getDateTime(r) >= now);
+  const pastReminders = reminders.filter(r => getDateTime(r) < now);
 
   return (
     <div className="min-h-screen mt-16 bg-gray-50">

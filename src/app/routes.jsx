@@ -6,66 +6,45 @@ import AddJob from './pages/AddJob';
 import Reminders from './pages/Reminders';
 import Profile from './pages/Profile';
 import EditJob from './pages/EditJob';
+import RootLayout from './components/RootLayout';
 
 export const router = createBrowserRouter([
+
   {
-    path: '/login',
-    element: <Login />
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      { path: "/login", element: <Login /> },
+      { path: "/", element: (
+          <ProtectedRoute role="USER">
+            <Dashboard />
+          </ProtectedRoute>
+      )},
+      { path: "/admin", element: (
+          <ProtectedRoute role="ADMIN">
+            <Dashboard />
+          </ProtectedRoute>
+      )},
+      { path: "/add-job", element: (
+          <ProtectedRoute role="USER">
+            <AddJob />
+          </ProtectedRoute>
+      )},
+      { path: "/edit-job/:id", element: (
+          <ProtectedRoute role="USER">
+            <EditJob />
+          </ProtectedRoute>
+      )},
+      { path: "/reminders", element: (
+          <ProtectedRoute role="USER">
+            <Reminders />
+          </ProtectedRoute>
+      )},
+      { path: "/profile", element: (
+          <ProtectedRoute role="USER">
+            <Profile />
+          </ProtectedRoute>
+      )},
+    ],
   },
-
-  // ✅ USER DASHBOARD
-  {
-    path: '/',
-    element: (
-      <ProtectedRoute role="USER">
-        <Dashboard />
-      </ProtectedRoute>
-    )
-  },
-
-  // ✅ ADMIN DASHBOARD (optional)
-  {
-    path: '/admin',
-    element: (
-      <ProtectedRoute role="ADMIN">
-        <Dashboard />
-      </ProtectedRoute>
-    )
-  },
-
-  {
-    path: '/add-job',
-    element: (
-      <ProtectedRoute role="USER">
-        <AddJob />
-      </ProtectedRoute>
-    )
-  },
-
-  {
-  path: '/edit-job/:id',
-  element: (
-    <ProtectedRoute role="USER">
-      <EditJob />
-    </ProtectedRoute>
-  )
- },
-
-  {
-    path: '/reminders',
-    element: (
-      <ProtectedRoute role="USER">
-        <Reminders />
-      </ProtectedRoute>
-    )
-  },
-
-  {
-    path: '/profile',
-    element: (
-      <ProtectedRoute role="USER">
-        <Profile />
-      </ProtectedRoute>
-    )
-  }
 ]);

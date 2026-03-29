@@ -14,7 +14,10 @@ export default function ReminderCard({ reminder, onDelete }) {
     }
   };
 
-  const isPast = new Date(reminder.date) < new Date();
+  const reminderDateTime = new Date(`${reminder.date}T${reminder.time}`);
+  const now = new Date();
+
+  const isPast = reminderDateTime < now;
 
   return (
     <div className={`bg-white rounded-xl border p-6 hover:shadow-md transition-shadow ${

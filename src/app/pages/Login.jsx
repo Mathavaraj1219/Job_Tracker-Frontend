@@ -20,10 +20,10 @@ export default function Login() {
 
   // ✅ Redirect after login
   useEffect(() => {
-  if (token) {
+  if (token && user) {
     toast.success('Login successful!');
 
-    if (user.role === 'ADMIN') {
+    if (user?.role === 'ADMIN') {
       navigate('/admin');
     } else {
       navigate('/');
