@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { X } from "lucide-react";
 
 const EditReminder = ({
   isOpen,
@@ -51,19 +52,19 @@ const EditReminder = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
+    <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50 transform transition-all duration-300 scale-95 animate-in fade-in zoom-in">
 
-      <div className="bg-white rounded-2xl w-full max-w-2xl p-6 relative">
+      <div className="bg-white rounded-2xl w-full max-w-5xl p-15 relative shadow-2xl border border-gray-200">
 
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          className="absolute top-10 right-10 font-semibold text-gray-500 hover:text-gray-700"
         >
-          ✕
+          <X className="w-8 h-8 bg-gray-300 px-1 py-1 rounded-full " />
         </button>
 
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">
           Edit Reminder
         </h2>
 
@@ -155,7 +156,7 @@ const EditReminder = ({
           <div className="flex gap-4">
             <button
               type="submit"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
               Update Reminder
             </button>
@@ -163,7 +164,7 @@ const EditReminder = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 border rounded-lg"
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
             >
               Cancel
             </button>

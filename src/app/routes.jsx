@@ -7,6 +7,7 @@ import Reminders from './pages/Reminders';
 import Profile from './pages/Profile';
 import EditJob from './pages/EditJob';
 import RootLayout from './components/RootLayout';
+import AdminDashboard from './pages/AdminDashboard';
 
 export const router = createBrowserRouter([
 
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
       )},
       { path: "/admin", element: (
           <ProtectedRoute role="ADMIN">
-            <Dashboard />
+            <AdminDashboard />
           </ProtectedRoute>
       )},
       { path: "/add-job", element: (

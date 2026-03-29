@@ -223,20 +223,6 @@ export default function Profile() {
             </div>
           </form>
         </div>
-
-        {/* Backend Integration Info */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-          <h3 className="text-sm font-medium text-blue-900 mb-2">Backend Integration</h3>
-          <p className="text-sm text-blue-700 mb-3">
-            This frontend is ready to connect to your Spring Boot backend. Update the API endpoints in 
-            <code className="mx-1 px-2 py-1 bg-blue-100 rounded text-xs">/src/app/services/api.js</code>
-          </p>
-          <ul className="text-sm text-blue-700 space-y-1 list-disc list-inside">
-            <li>Configure JWT authentication in your Spring Boot backend</li>
-            <li>Set up email service (SMTP) for email notifications</li>
-            <li>Integrate Twilio or similar service for WhatsApp notifications</li>
-          </ul>
-        </div>
       </div>
     </div>
   );
