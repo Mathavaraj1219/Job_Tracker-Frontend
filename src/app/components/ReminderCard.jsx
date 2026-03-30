@@ -1,8 +1,7 @@
 import { Calendar, Mail, MessageCircle, Trash2, Building2, BadgeCheck, Pencil } from 'lucide-react';
-import { useState } from 'react';
-import EditReminder from '../pages/EditReminder';
 
-export default function ReminderCard({ reminder, onDelete, onEdit }) {
+
+export default function ReminderCard({ reminder, jobs, onDelete, onEdit }) {
   const getReminderTypeColor = (type) => {
     switch (type) {
       case 'Interview':
@@ -15,6 +14,8 @@ export default function ReminderCard({ reminder, onDelete, onEdit }) {
         return 'bg-gray-50 text-gray-700 border-gray-200';
     }
   };
+
+  const job = jobs?.find(j => j.id === Number(reminder.jobId));
 
   const reminderDateTime = new Date(`${reminder.date}T${reminder.time}`);
   const now = new Date();
@@ -37,11 +38,11 @@ export default function ReminderCard({ reminder, onDelete, onEdit }) {
           </div>
           <div className="flex items-center gap-2 text-gray-600 mb-2">
             <Building2 className="w-4 h-4" />
-            <span className="text-sm font-medium">{reminder.company}</span>
+            <span className="text-sm font-medium">{job?.company || reminder.company}</span>
           </div>
           <div className="flex items-center gap-2 text-gray-600 mb-2">
             <BadgeCheck className="w-4 h-4" />
-          <p className="text-sm text-gray-500">{reminder.position}</p>
+          <p className="text-sm text-gray-500">{job?.position || reminder.position}</p>
           </div>
         </div>
         <div className="flex gap-2">

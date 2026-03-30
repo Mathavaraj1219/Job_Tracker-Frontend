@@ -20,6 +20,6 @@ export const deleteReminderAPI = async (id) => {
 
 //Update reminder
 export const updateReminderAPI = async (id, data) => {
-  const res = await axios.put(`/user/reminder/${id}`, data);
+  const res = await axios.put(`/user/reminders/${id}`, data);
   return res.data;
 }

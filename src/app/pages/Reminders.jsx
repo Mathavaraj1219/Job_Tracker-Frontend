@@ -313,7 +313,7 @@ export default function Reminders() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {upcomingReminders.map((reminder) => (
-                    <ReminderCard key={reminder.id} reminder={reminder} onDelete={handleDelete} onEdit={handleEdit}/>
+                    <ReminderCard key={reminder.id} reminder={reminder} jobs={jobs} onDelete={handleDelete} onEdit={handleEdit}/>
                   ))}
                 </div>
               )}
@@ -325,7 +325,7 @@ export default function Reminders() {
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Past Reminders</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {pastReminders.map((reminder) => (
-                    <ReminderCard key={reminder.id} reminder={reminder} onDelete={handleDelete} onEdit={handleEdit} />
+                    <ReminderCard key={reminder.id} reminder={reminder} jobs={jobs} onDelete={handleDelete} onEdit={handleEdit} />
                   ))}
                 </div>
               </div>

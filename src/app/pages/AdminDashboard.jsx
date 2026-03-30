@@ -7,6 +7,7 @@ export default function AdminDashboard() {
     const dispatch = useDispatch();
 
     const { users } = useSelector((state) => state.users);
+    console.log(users);
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -84,7 +85,7 @@ export default function AdminDashboard() {
               </td>
 
               <td className="p-4 text-gray-500">
-                {new Date(user.createdAt).toLocaleDateString()}
+                {user.createdAt}
               </td>
 
             </tr>

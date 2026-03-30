@@ -5,7 +5,8 @@ import Navbar from '../components/Navbar';
 import JobCard from '../components/JobCard';
 import { fetchJobs, deleteJob } from '../features/jobs/jobSlice';
 import ReminderCard from '../components/ReminderCard';
-import { fetchReminders, deleteReminder } from '../features/reminders/reminderSlice';
+import EditReminder from '../pages/EditReminder';
+import { fetchReminders, deleteReminder, updateReminder } from '../features/reminders/reminderSlice';
 import { Plus, Briefcase, Clock, CheckCircle, XCircle, Bell } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -14,6 +15,9 @@ export default function Dashboard() {
 
   const { jobs, loading } = useSelector((state) => state.jobs);
   const { reminders } = useSelector((state) => state.reminders);
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedReminder, setSelectedReminder] = useState(null);
 
   const [filter, setFilter] = useState('All');
   const [view, setView] = useState('jobs');
@@ -39,6 +43,31 @@ export default function Dashboard() {
       .unwrap()
       .then(() => toast.success('Reminder deleted'))
       .catch(() => toast.error('Failed to delete reminder'));
+  };
+
+  const handleEdit = (reminder) => {
+    setSelectedReminder(reminder);
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (id, data) => {
+    try {
+      const selectedJob = jobs.find(j => j.id === parseInt(data.jobId));
+
+      const updatedData = {
+        ...data,
+        jobId: parseInt(data.jobId),
+        company: selectedJob.company,
+        position: selectedJob.position
+      };
+
+      await dispatch(updateReminder({ id, data: updatedData })).unwrap();
+
+      setShowEditModal(false);
+      toast.success("Reminder updated ✅");
+    } catch {
+      toast.error("Update failed ❌");
+    }
   };
 
   const filteredJobs =
@@ -206,16 +235,18 @@ export default function Dashboard() {
               
             ) : (
               reminders.map((reminder) => (
-                <ReminderCard
-                  key={reminder.id}
-                  reminder={reminder}
-                  onDelete={handleDeleteReminder}
-                />
+                // <ReminderCard
+                //   key={reminder.id}
+                //   reminder={reminder}
+                //   onDelete={handleDeleteReminder}
+                // />
+                <ReminderCard key={reminder.id} reminder={reminder} jobs={jobs} onDelete={handleDeleteReminder} onEdit={handleEdit}/>
               ))
             )}
           </div>
         )}
       </div>
+      <EditReminder isOpen={showEditModal} onClose={() => setShowEditModal(false)} selectedReminder={selectedReminder} onUpdate={handleUpdate} jobs={jobs} />
     </div>
   );
 }

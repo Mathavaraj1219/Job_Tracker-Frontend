@@ -39,7 +39,6 @@ export default function EditJob() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("handle summit");
 
     dispatch(updateJob({id: id, data: formData}))
       .unwrap()

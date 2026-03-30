@@ -33,7 +33,7 @@ export const deleteReminder = createAsyncThunk(
 //Update
 export const updateReminder = createAsyncThunk(
   "reminders/update",
-  async (id, data) => {
+  async ({id, data}) => {
     return await updateReminderAPI(id, data);
   }
 )
@@ -67,8 +67,12 @@ const reminderSlice = createSlice({
         state.addLoading = true;
       })
       .addCase(addReminder.fulfilled, (state, action) => {
-        state.addLoading = false;
-        state.reminders.push(action.payload);
+        const newReminder = action.meta.arg;
+
+        state.reminders.push({
+          id: action.payload.id,
+          ...newReminder
+        });
       })
       .addCase(addReminder.rejected, (state) => {
         state.addLoading = false;
@@ -86,6 +90,18 @@ const reminderSlice = createSlice({
       })
       .addCase(deleteReminder.rejected, (state) => {
         state.deleteLoading = false;
+      })
+      .addCase(updateReminder.fulfilled, (state, action) => {
+        const updatedData = action.meta.arg;
+
+        const index = state.reminders.findIndex(r => r.id === updatedData.id);
+
+        if (index !== -1) {
+          state.reminders[index] = {
+            ...state.reminders[index],
+            ...updatedData.data
+          };
+        }
       });
   },
 });
