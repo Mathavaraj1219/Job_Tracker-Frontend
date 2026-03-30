@@ -1,98 +1,239 @@
-import { Mail, Phone, MessageCircle } from "lucide-react";
+import { Mail, Phone, MessageCircle, LogOut, Users, Copy } from "lucide-react";
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchUsers } from "../features/user/userSlice";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
+import { logout } from "../features/auth/authSlice";
+import logo from "../../assets/logo2.png";
 
 export default function AdminDashboard() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const { users } = useSelector((state) => state.users);
-    console.log(users);
+  const { users = [], loading } = useSelector((state) => state.users);
 
-    useEffect(() => {
-        dispatch(fetchUsers());
-      }, [dispatch]);
- 
-      console.log(users);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  // ✅ Logout
+  const handleLogout = () => {
+      dispatch(logout());
+      navigate('/login');
+    };
+
+  const handleCopy = async (email) => {
+  try {
+    await navigator.clipboard.writeText(email);
+    toast.success("Copied ✅");
+  } catch {
+    toast.error("Copy failed ❌");
+  }
+};
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+  const totalPages = Math.ceil(users.length / usersPerPage);
 
   return (
-    <div className="bg-white rounded-xl border overflow-hidden">
+    <div className="min-h-screen bg-gray-50">
 
-      <table className="w-full text-sm text-left">
+      {/* 🔥 Navbar */}
+      <div className="bg-white border-b px-6 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <Link to="/admin" className="flex items-center gap-2 hover:opacity-80 transition">
+            <img src={logo} alt="logo" className="h-10" />
+            <span className="text-lg font-semibold text-black">
+              FollowUp<span className="text-2xl text-green-600 font-bold">PRO</span>
+            </span>
+          </Link>
+        </div>
 
-        {/* HEADER */}
-        <thead className="bg-gray-50 border-b">
-          <tr>
-            <th className="p-4">ID</th>
-            <th className="p-4">Username</th>
-            <th className="p-4">Email</th>
-            <th className="p-4">Phone</th>
-            <th className="p-4">WhatsApp</th>
-            <th className="p-4">Notifications</th>
-            <th className="p-4">Joined</th>
-          </tr>
-        </thead>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-sm bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+        >
+          <LogOut className="w-4 h-4" />
+          Logout
+        </button>
+      </div>
 
-        {/* BODY */}
-        <tbody>
+      <div className="p-6">
 
-          {users.map(user => (
-            <tr key={user.id} className="border-b hover:bg-gray-50">
+        <div className="flex items-center justify-center gap-2 mb-5">
+          <Users className="w-6 h-6 text-blue-600" />
+          <h1 className="text-xl font-semibold">Admin Dashboard</h1>
+        </div>
 
-              <td className="p-4 text-gray-500">{user.id}</td>
+        {/* 🔥 Table Container */}
+        <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">  
 
-              <td className="p-4 font-medium">
-                {user.username}
-              </td>
+          {/* Header */}
+          <div className="px-6 py-4 border-b flex justify-between items-center">
+            <h2 className="text-lg font-semibold">Users</h2>
+            <span className="text-sm text-gray-500">
+              Total : {users.length}
+            </span>
+          </div>
 
-              <td className="p-4 text-gray-600">
-                {user.email}
-              </td>
+          {/* Loading */}
+          {loading ? (
+            <div className="text-center py-10">
+              <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p className="mt-3 text-gray-500">Loading users...</p>
+            </div>
+          ) : users.length === 0 ? (
+            <div className="text-center py-10 text-gray-500">
+              No users found
+            </div>
+          ) : (
 
-              <td className="p-4 text-gray-600 flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                {user.phoneNumber || "-"}
-              </td>
+            <table className="w-full text-sm text-left">
 
-              <td className="p-4 text-gray-600 flex items-center gap-2">
-                <MessageCircle className="w-4 h-4" />
-                {user.whatsappNumber || "-"}
-              </td>
+              {/* HEADER */}
+              <thead className="bg-gray-50 text-gray-600">
+                <tr>
+                  <th className="p-4">ID</th>
+                  <th className="p-4">User</th>
+                  <th className="p-4">Email</th>
+                  <th className="p-4">Contact</th>
+                  <th className="p-4">Notifications</th>
+                  <th className="p-4">Joined</th>
+                </tr>
+              </thead>
 
-              {/* Notification Methods */}
-              <td className="p-4">
-                <div className="flex gap-2">
+              {/* BODY */}
+              <tbody>
+                {currentUsers.map(user => (
+                  <tr key={user.id} className="border-t hover:bg-gray-50 transition">
 
-                  {user.notifyEmail && (
-                    <span className="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                      <Mail className="w-3 h-3" />
-                      Email
-                    </span>
-                  )}
+                    <td className="p-4 text-gray-600">
+                      {user.id}
+                    </td>
 
-                  {user.notifyWhatsApp && (
-                    <span className="flex items-center gap-1 text-xs bg-green-50 text-green-700 px-2 py-1 rounded">
-                      <MessageCircle className="w-3 h-3" />
-                      WhatsApp
-                    </span>
-                  )}
+                    {/* User Info */}
+                    <td className="p-4">
+                      <p className="font-medium">{user.username}</p>
+                    </td>
 
-                  {!user.notifyEmail && !user.notifyWhatsApp && (
-                    <span className="text-gray-400 text-xs">None</span>
-                  )}
+                    <td className="p-4">
+                      <div className="flex items-center gap-2 group">
+    
+                        <span className="text-gray-600 text-sm">
+                          {user.email}
+                        </span>
 
-                </div>
-              </td>
+                        <button
+                          onClick={() => handleCopy(user.email)}
+                          className="opacity-0 group-hover:opacity-100 transition p-1 rounded hover:bg-gray-100"
+                          title="Copy email"
+                        >
+                          <Copy className="w-4 h-4 text-gray-500" />
+                        </button>
+                      </div>  
+                    </td>
 
-              <td className="p-4 text-gray-500">
-                {user.createdAt}
-              </td>
+                    {/* Contact */}
+                    <td className="p-4 space-y-1">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Phone className="w-4 h-4 text-blue-700" />
+                        {user.phoneNumber || "None"}
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <MessageCircle className="w-4 h-4 text-green-700" />
+                        {user.whatsappNumber || "None"}
+                      </div>
+                    </td>
 
-            </tr>
-          ))}
+                    {/* Notifications */}
+                    <td className="p-4">
+                      <div className="flex gap-2 flex-wrap">
 
-        </tbody>
-      </table>
+                        {user.notifyEmail && (
+                          <span className="flex items-center gap-1 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                            <Mail className="w-3 h-3" />
+                            Email
+                          </span>
+                        )}
+
+                        {user.notifyWhatsApp && (
+                          <span className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                            <MessageCircle className="w-3 h-3" />
+                            WhatsApp
+                          </span>
+                        )}
+
+                        {!user.notifyEmail && !user.notifyWhatsApp && (
+                          <span className="text-gray-600 text-sm">
+                            None
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* Date */}
+                    <td className="p-4 text-gray-500 text-sm">
+                      {user.createdAt
+                        ? new Date(user.createdAt).toLocaleString('en-IN', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                          })
+                        : "-"}
+                    </td>
+
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+          )}
+        </div>
+        <div className="flex justify-center items-center gap-4 p-4 border-t">
+
+          {/* Previous */}
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 text-sm border border-gray-500 rounded-lg disabled:opacity-50"
+          >
+            Previous
+          </button>
+
+          {/* Page Numbers */}
+          <div className="flex gap-2">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 rounded-lg text-sm ${
+                  currentPage === page
+                    ? 'bg-blue-600 text-white'
+                    : 'border'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+
+          {/* Next */}
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 text-sm border border-gray-500 rounded-lg disabled:opacity-50"
+          >
+            Next
+          </button>
+
+        </div>
+      </div>
     </div>
   );
 }
